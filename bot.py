@@ -20,4 +20,4 @@ async def start(message: types.Message):
 
 #  Запуск бота
 if __name__ == "__main__":
-    pass
+    executor.start_polling(dp)
