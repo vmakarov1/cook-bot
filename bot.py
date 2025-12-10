@@ -10,6 +10,13 @@ TELEGRAM_TOKEN = os.getenv("TELEGRAM_TOKEN")
 bot = Bot(token=TELEGRAM_TOKEN)
 dp = Dispatcher(bot)
 
+#  Команда /start
+@dp.message_handler(commands=["start"])
+async def start(message: types.Message):
+
+    await message.answer(
+        "Привет! Я помогу тебе найти рецепты по ингредиентам 😊"
+    )
 
 #  Запуск бота
 if __name__ == "__main__":
