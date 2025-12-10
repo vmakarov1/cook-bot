@@ -7,6 +7,9 @@ from aiogram.utils import executor
 load_dotenv("tokens.env")
 TELEGRAM_TOKEN = os.getenv("TELEGRAM_TOKEN")
 
+bot = Bot(token=TELEGRAM_TOKEN)
+dp = Dispatcher(bot)
+
 
 #  Запуск бота
 if __name__ == "__main__":
