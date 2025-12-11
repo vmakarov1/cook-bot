@@ -6,6 +6,7 @@ from aiogram.utils import executor
 # Токены берутся из переменных окружения
 load_dotenv("tokens.env")
 TELEGRAM_TOKEN = os.getenv("TELEGRAM_TOKEN")
+SPOONACULAR_KEY = os.getenv("SPOONACULAR_KEY")
 
 bot = Bot(token=TELEGRAM_TOKEN)
 dp = Dispatcher(bot)
@@ -56,6 +57,8 @@ async def handle_ingredients(message: types.Message):
 
     # сохраняем список найденных рецептов
     user_context[user_id] = recipes
+
+
 
 
 #  Запуск бота
