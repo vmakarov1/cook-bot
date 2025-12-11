@@ -1,7 +1,9 @@
 from dotenv import load_dotenv
 import os
 from aiogram import Bot, Dispatcher, types
+from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 from aiogram.utils import executor
+import requests
 
 # Токены берутся из переменных окружения
 load_dotenv("tokens.env")
@@ -58,6 +60,12 @@ async def handle_ingredients(message: types.Message):
     # сохраняем список найденных рецептов
     user_context[user_id] = recipes
 
+    kb = InlineKeyboardMarkup()
+    for r in recipes:
+        kb.add(InlineKeyboardButton(r["title"], callback_data=f"recipe_{r['id']}"))
+    kb.add(InlineKeyboardButton("🔍 Поиск заново", callback_data="restart"))
+
+    await message.answer("Вот что удалось найти 👇", reply_markup=kb)
 
 
 
