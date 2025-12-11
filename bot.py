@@ -89,6 +89,16 @@ async def show_recipe(callback: types.CallbackQuery):
             text += f"{step['number']}. {step['step']}\n"
     else:
         text += "Нет шага приготовления.\n"
+    
+    # фото + текст
+    await callback.message.answer_photo(
+        photo=details["image"],
+        caption=text,
+        reply_markup=kb,
+        parse_mode="HTML"
+    )
+
+    await callback.answer()
 
 
 
