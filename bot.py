@@ -98,7 +98,10 @@ async def show_recipe(callback: types.CallbackQuery):
     recipe_id = callback.data.split("_")[1]
     details = get_recipe_details(recipe_id)
 
-
+    # кнопки
+    kb = InlineKeyboardMarkup()
+    kb.add(InlineKeyboardButton("⬅ Назад", callback_data="back"))
+    kb.add(InlineKeyboardButton("🔍 Поиск заново", callback_data="restart"))
 
     # текст рецепта
     text = f"🍽 <b>{details['title']}</b>\n"
@@ -144,6 +147,13 @@ async def go_back(callback: types.CallbackQuery):
     kb.add(InlineKeyboardButton("🔍 Поиск заново", callback_data="restart"))
 
     await callback.message.answer("Выбери рецепт 👇", reply_markup=kb)
+    await callback.answer()
+
+
+#  Кнопка "Поиск заново"
+@dp.callback_query_handler(lambda c: c.data == "restart")
+async def restart(callback: types.CallbackQuery):
+    await callback.message.answer("Введите новые ингредиенты:")
     await callback.answer()
 
 
