@@ -74,6 +74,12 @@ async def show_recipe(callback: types.CallbackQuery):
     recipe_id = callback.data.split("_")[1]
     details = get_recipe_details(recipe_id)
 
+    # текст рецепта
+    text = f"🍽 <b>{details['title']}</b>\n"
+    text += f"⏱ Время приготовления: {details.get('readyInMinutes', '—')} мин\n"
+    text += f"👥 Порций: {details.get('servings', '—')}\n\n"
+
+
 
 #  Запуск бота
 if __name__ == "__main__":
