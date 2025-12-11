@@ -101,6 +101,7 @@ async def show_recipe(callback: types.CallbackQuery):
     # кнопки
     kb = InlineKeyboardMarkup()
     kb.add(InlineKeyboardButton("⬅ Назад", callback_data="back"))
+    kb.add(InlineKeyboardButton("❤️ В избранное", callback_data=f"fav_{recipe_id}"))
     kb.add(InlineKeyboardButton("🔍 Поиск заново", callback_data="restart"))
 
     # текст рецепта
