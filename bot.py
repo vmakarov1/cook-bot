@@ -23,6 +23,12 @@ def search_recipes(ingredients):
     }
     return requests.get(url, params=params).json()
 
+def get_recipe_details(recipe_id):
+    """полные данные о рецепте"""
+    url = f"https://api.spoonacular.com/recipes/{recipe_id}/information"
+    params = {"includeNutrition": False, "apiKey": SPOONACULAR_KEY}
+    return requests.get(url, params=params).json()
+
 
 #  Команда /start
 @dp.message_handler(commands=["start"])
