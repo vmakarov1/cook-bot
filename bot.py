@@ -46,7 +46,11 @@ async def handle_ingredients(message: types.Message):
     ingredients = message.text.lower().replace(",", " ").split()
 
     recipes = search_recipes(ingredients)
-    
+
+    if not recipes:
+        await message.answer("😔 Ничего не нашёл. Попробуй добавить другие продукты.")
+        return
+
 
 #  Запуск бота
 if __name__ == "__main__":
