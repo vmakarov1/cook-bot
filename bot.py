@@ -30,7 +30,6 @@ def save_favorites(data):
     with open("users_data.json", "w", encoding="utf-8") as f:
         json.dump(data, f, ensure_ascii=False, indent=4)
 
-favorites = load_favorites()
 
 
 #  API Spoonacular
