@@ -39,6 +39,15 @@ async def start(message: types.Message):
     )
 
 
+#  Обработка текста с ингредиентами
+@dp.message_handler()
+async def handle_ingredients(message: types.Message):
+    user_id = str(message.from_user.id)
+    ingredients = message.text.lower().replace(",", " ").split()
+
+    recipes = search_recipes(ingredients)
+    
+
 #  Запуск бота
 if __name__ == "__main__":
     executor.start_polling(dp)
