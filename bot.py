@@ -68,6 +68,12 @@ async def handle_ingredients(message: types.Message):
     await message.answer("Вот что удалось найти 👇", reply_markup=kb)
 
 
+#  Показ конкретного рецепта
+@dp.callback_query_handler(lambda c: c.data.startswith("recipe_"))
+async def show_recipe(callback: types.CallbackQuery):
+    recipe_id = callback.data.split("_")[1]
+    details = get_recipe_details(recipe_id)
+
 
 #  Запуск бота
 if __name__ == "__main__":
