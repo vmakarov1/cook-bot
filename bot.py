@@ -79,6 +79,10 @@ async def show_recipe(callback: types.CallbackQuery):
     text += f"⏱ Время приготовления: {details.get('readyInMinutes', '—')} мин\n"
     text += f"👥 Порций: {details.get('servings', '—')}\n\n"
 
+    text += "<b>Ингредиенты:</b>\n"
+    for ing in details["extendedIngredients"]:
+        text += f"• {ing['name']} — {ing['amount']} {ing['unit']}\n"
+
 
 
 #  Запуск бота
