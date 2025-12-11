@@ -101,6 +101,7 @@ async def show_recipe(callback: types.CallbackQuery):
     # кнопки
     kb = InlineKeyboardMarkup()
     kb.add(InlineKeyboardButton("⬅ Назад", callback_data="back"))
+    kb.add(InlineKeyboardButton("❤️ В избранное", callback_data=f"fav_{recipe_id}"))
     kb.add(InlineKeyboardButton("🔍 Поиск заново", callback_data="restart"))
 
     # текст рецепта
@@ -163,10 +164,40 @@ async def add_favorite(callback: types.CallbackQuery):
     user_id = str(callback.from_user.id)
     recipe_id = callback.data.split("_")[1]
 
+    if user_id not in favorites:
+        favorites[user_id] = []
+
+    if recipe_id in favorites[user_id]:
+        await callback.answer("Уже в избранном ❤️")
+        return
+
     favorites[user_id].append(recipe_id)
     save_favorites(favorites)
 
     await callback.answer("Добавлено в избранное ❤️")
+
+
+#  Показ избранных рецептов
+@dp.callback_query_handler(lambda c: c.data == "show_favorites")
+async def show_favorites(callback: types.CallbackQuery):
+    user_id = str(callback.from_user.id)
+    fav_list = favorites.get(user_id, [])
+
+    if not fav_list:
+        await callback.message.answer("У вас нет избранных рецептов ⭐")
+        await callback.answer()
+        return
+
+    kb = InlineKeyboardMarkup()
+
+    for recipe_id in fav_list:
+        details = get_recipe_details(recipe_id)
+        kb.add(InlineKeyboardButton(details["title"], callback_data=f"recipe_{recipe_id}"))
+
+    kb.add(InlineKeyboardButton("🔍 Поиск заново", callback_data="restart"))
+
+    await callback.message.answer("⭐ Ваши избранные рецепты:", reply_markup=kb)
+    await callback.answer()
 
 
 #  Запуск бота
