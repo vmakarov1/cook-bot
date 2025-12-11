@@ -56,9 +56,16 @@ def get_recipe_details(recipe_id):
 #  Команда /start
 @dp.message_handler(commands=["start"])
 async def start(message: types.Message):
+    kb = InlineKeyboardMarkup()
+    kb.add(InlineKeyboardButton("⭐ Мои избранные", callback_data="show_favorites"))
 
     await message.answer(
-        "Привет! Я помогу тебе найти рецепты по ингредиентам 😊"
+        "Привет! Я помогу тебе найти рецепты по ингредиентам 😊\n\n"
+        "Просто напиши, что у тебя есть. Например:\n"
+        "<b>курица лук рис</b>\n\n"
+        "Или нажми кнопку:",
+        reply_markup=kb,
+        parse_mode="HTML"
     )
 
 
@@ -91,6 +98,8 @@ async def show_recipe(callback: types.CallbackQuery):
     recipe_id = callback.data.split("_")[1]
     details = get_recipe_details(recipe_id)
 
+
+
     # текст рецепта
     text = f"🍽 <b>{details['title']}</b>\n"
     text += f"⏱ Время приготовления: {details.get('readyInMinutes', '—')} мин\n"
@@ -117,6 +126,37 @@ async def show_recipe(callback: types.CallbackQuery):
 
     await callback.answer()
 
+
+#  Кнопка "Назад"
+@dp.callback_query_handler(lambda c: c.data == "back")
+async def go_back(callback: types.CallbackQuery):
+    user_id = str(callback.from_user.id)
+    recipes = user_context.get(user_id)
+
+    if not recipes:
+        await callback.message.answer("История пуста 😕")
+        await callback.answer()
+        return
+
+    kb = InlineKeyboardMarkup()
+    for r in recipes:
+        kb.add(InlineKeyboardButton(r["title"], callback_data=f"recipe_{r['id']}"))
+    kb.add(InlineKeyboardButton("🔍 Поиск заново", callback_data="restart"))
+
+    await callback.message.answer("Выбери рецепт 👇", reply_markup=kb)
+    await callback.answer()
+
+
+# Добавление в избранное
+@dp.callback_query_handler(lambda c: c.data.startswith("fav_"))
+async def add_favorite(callback: types.CallbackQuery):
+    user_id = str(callback.from_user.id)
+    recipe_id = callback.data.split("_")[1]
+
+    favorites[user_id].append(recipe_id)
+    save_favorites(favorites)
+
+    await callback.answer("Добавлено в избранное ❤️")
 
 
 #  Запуск бота
