@@ -10,6 +10,20 @@ TELEGRAM_TOKEN = os.getenv("TELEGRAM_TOKEN")
 bot = Bot(token=TELEGRAM_TOKEN)
 dp = Dispatcher(bot)
 
+
+#  API Spoonacular
+def search_recipes(ingredients):
+    """поиск рецептов по ингредиентам"""
+    url = "https://api.spoonacular.com/recipes/findByIngredients"
+    params = {
+        "ingredients": ",".join(ingredients),
+        "number": 5,
+        "ranking": 1,
+        "apiKey": SPOONACULAR_KEY
+    }
+    return requests.get(url, params=params).json()
+
+
 #  Команда /start
 @dp.message_handler(commands=["start"])
 async def start(message: types.Message):
@@ -17,6 +31,7 @@ async def start(message: types.Message):
     await message.answer(
         "Привет! Я помогу тебе найти рецепты по ингредиентам 😊"
     )
+
 
 #  Запуск бота
 if __name__ == "__main__":
