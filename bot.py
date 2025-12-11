@@ -163,6 +163,13 @@ async def add_favorite(callback: types.CallbackQuery):
     user_id = str(callback.from_user.id)
     recipe_id = callback.data.split("_")[1]
 
+    if user_id not in favorites:
+        favorites[user_id] = []
+
+    if recipe_id in favorites[user_id]:
+        await callback.answer("Уже в избранном ❤️")
+        return
+
     favorites[user_id].append(recipe_id)
     save_favorites(favorites)
 
