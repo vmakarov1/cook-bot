@@ -83,6 +83,13 @@ async def show_recipe(callback: types.CallbackQuery):
     for ing in details["extendedIngredients"]:
         text += f"• {ing['name']} — {ing['amount']} {ing['unit']}\n"
 
+    text += "\n<b>Шаги приготовления:</b>\n"
+    if details.get("analyzedInstructions"):
+        for step in details["analyzedInstructions"][0]["steps"]:
+            text += f"{step['number']}. {step['step']}\n"
+    else:
+        text += "Нет шага приготовления.\n"
+
 
 
 #  Запуск бота
