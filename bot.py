@@ -1,5 +1,6 @@
 from dotenv import load_dotenv
 import os
+import json
 from aiogram import Bot, Dispatcher, types
 from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 from aiogram.utils import executor
@@ -15,6 +16,22 @@ dp = Dispatcher(bot)
 
 # Временное хранилище текущих найденных рецептов для каждого пользователя
 user_context = {}
+
+
+#  Функции работы с избранным
+def load_favorites():
+    try:
+        with open("users_data.json", "r", encoding="utf-8") as f:
+            return json.load(f)
+    except:
+        return {}
+
+def save_favorites(data):
+    with open("users_data.json", "w", encoding="utf-8") as f:
+        json.dump(data, f, ensure_ascii=False, indent=4)
+
+favorites = load_favorites()
+
 
 
 #  API Spoonacular
