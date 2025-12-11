@@ -176,6 +176,29 @@ async def add_favorite(callback: types.CallbackQuery):
     await callback.answer("Добавлено в избранное ❤️")
 
 
+#  Показ избранных рецептов
+@dp.callback_query_handler(lambda c: c.data == "show_favorites")
+async def show_favorites(callback: types.CallbackQuery):
+    user_id = str(callback.from_user.id)
+    fav_list = favorites.get(user_id, [])
+
+    if not fav_list:
+        await callback.message.answer("У вас нет избранных рецептов ⭐")
+        await callback.answer()
+        return
+
+    kb = InlineKeyboardMarkup()
+
+    for recipe_id in fav_list:
+        details = get_recipe_details(recipe_id)
+        kb.add(InlineKeyboardButton(details["title"], callback_data=f"recipe_{recipe_id}"))
+
+    kb.add(InlineKeyboardButton("🔍 Поиск заново", callback_data="restart"))
+
+    await callback.message.answer("⭐ Ваши избранные рецепты:", reply_markup=kb)
+    await callback.answer()
+
+
 #  Запуск бота
 if __name__ == "__main__":
     executor.start_polling(dp)
