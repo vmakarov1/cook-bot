@@ -10,6 +10,9 @@ TELEGRAM_TOKEN = os.getenv("TELEGRAM_TOKEN")
 bot = Bot(token=TELEGRAM_TOKEN)
 dp = Dispatcher(bot)
 
+# Временное хранилище текущих найденных рецептов для каждого пользователя
+user_context = {}
+
 
 #  API Spoonacular
 def search_recipes(ingredients):
@@ -50,6 +53,9 @@ async def handle_ingredients(message: types.Message):
     if not recipes:
         await message.answer("😔 Ничего не нашёл. Попробуй добавить другие продукты.")
         return
+
+    # сохраняем список найденных рецептов
+    user_context[user_id] = recipes
 
 
 #  Запуск бота
